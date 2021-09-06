@@ -10,9 +10,33 @@
  */
 
 const httpError = require('http-errors');
+const service = require('./building.service');
+const Model = require('../../models/building.model');
 
 
-exports.updateBuilding = (req, res, next) => {}
+exports.updateBuilding = (req, res, next) => {
+    const validationErrors = new Model(req.body).validateSync();
+    if (validationErrors) {
+        return next(
+            new createError.BadRequest(validationErrors)
+        );
+    }
+
+    return service.update(req.params.id, req.body)
+    .then(entity => {
+        res.json(entity);
+    })
+    .catch(err => {
+        console.log(err);
+        next(new createError.InternalServerError('Building could not be updated'));
+    });
+}
 
 
-exports.getAllBuildingWithClassrooms = () => {};
+exports.getAllBuildingWithClassrooms = (req, res, next) => {
+    return service.getAll()
+        .then(list => {
+            res.json(list);
+        })
+        .catch (err => new createError.InternalServerError('The list could not be downloaded'));
+};
