@@ -9,13 +9,18 @@
  * A szerver a megfelelő válaszokat küldje el a kliens felé
  */
 
-const httpError = require('http-errors');
+const createError = require('http-errors');
 const service = require('./building.service');
 const Model = require('../../models/building.model');
+const Classroom = require('../../models/classroom.model')
 
 
 exports.updateBuilding = (req, res, next) => {
-    const validationErrors = new Model(req.body).validateSync();
+    const classroom = req.body;
+    if (!classroom) {
+        return next(new createError.BadRequest('Missing classroom field'));
+    }
+    const validationErrors = new Classroom(req.body).validateSync();
     if (validationErrors) {
         return next(
             new createError.BadRequest(validationErrors)
@@ -28,7 +33,7 @@ exports.updateBuilding = (req, res, next) => {
     })
     .catch(err => {
         console.log(err);
-        next(new createError.InternalServerError('Building could not be updated'));
+        next(new createError.InternalServerError('Could not updated building'));
     });
 }
 
