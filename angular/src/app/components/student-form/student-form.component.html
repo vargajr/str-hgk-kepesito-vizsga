@@ -1,1 +1,25 @@
-<p>student-form works!</p>
+<section class="container-md mt-3">
+    <form class="p-3" #form="ngForm" (ngSubmit)="saveStudent(form)" id="studentForm">
+        <div class="mb-3">
+            <label for="firstName" class="form-label">FirstName:</label>
+            <input type="text" class="form-control" id="firstName" [(ngModel)]="studentForm.firstName" name="firstName" required #firstName="ngModel">
+            <small class="text-danger" *ngIf="firstName.invalid && firstName.touched">FirstName is required</small>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12 mb-3">
+                <label for="lastName" class="form-label">LastName:</label>
+                <input type="text" class="form-control" id="lastName" [(ngModel)]="studentForm.lastName" required name="lastName" #lastName="ngModel">
+                <small class="text-danger" *ngIf="lastName.invalid && lastName.touched">LastName is required</small>
+            </div>
+            <div class="col-md-6 col-sm-12 mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="text" class="form-control" id="email" [(ngModel)]="studentForm.email" required name="email" #email="ngModel">
+                <small class="text-danger" *ngIf="email.invalid && email.touched">Email is required</small>
+            </div>
+        </div>
+
+        <button [disabled]="form.invalid" type="submit" class="btn btn-primary" id="save-button">Save changes</button>
+    </form>
+
+</section>
